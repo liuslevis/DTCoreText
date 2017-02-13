@@ -74,7 +74,7 @@ extern unsigned int default_css_len;
 	if (self)
 	{
 		_styles	= [[NSMutableDictionary alloc] init];
-		_orderedSelectorWeights = [[NSMutableDictionary alloc] init];
+		_orderedSelectorWeights = [[NSMutableD'''ictionary alloc] init];
 		_orderedSelectors = [[NSMutableArray alloc] init];
 		
 		[self mergeStylesheet:stylesheet];
@@ -547,7 +547,9 @@ extern unsigned int default_css_len;
 
 - (void)parseStyleBlock:(NSString*)css
 {
-	NSUInteger braceLevel = 0, braceMarker = 0;
+	NSUInteger braceMarker = 0;
+	
+	NSInteger braceLevel = 0;
 	
 	NSString* selector;
 	
@@ -636,8 +638,11 @@ extern unsigned int default_css_len;
 				
 				braceMarker = i + 1;
 			}
-			
-			braceLevel = MAX(braceLevel-1, 0ul);
+			// Skip unpaired brace
+			else if (braceLevel < 1) {
+				braceMarker++;
+			}
+			braceLevel = MAX(braceLevel-1, 0);
 		}
 	}
 }
